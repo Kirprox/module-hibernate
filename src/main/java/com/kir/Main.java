@@ -1,5 +1,6 @@
 package com.kir;
 
+import com.kir.service.StudentService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -14,55 +15,14 @@ public class Main {
                 new AnnotationConfigApplicationContext("com.kir");
 
         SessionFactory sessionFactory = context.getBean(SessionFactory.class);
-        Session session = sessionFactory.openSession();
+        StudentService studentService = context.getBean(StudentService.class);
 
-        Student student1 = new Student("misha", 22);
-        Student student2 = new Student("pashsa", 20);
 
-        session.beginTransaction();
-        session.persist(student1);
-        session.persist(student2);
-        session.getTransaction().commit();
+        Student student1 = new Student("vasya", 22);
+        Student student2 = new Student("pasha", 20);
 
-        Student studentById1 = session.get(Student.class, 1L);
-        System.out.println(studentById1);
+        studentService.saveStudent(student1);
+        studentService.saveStudent(student2);
 
-        Student studentById2 = session.createQuery(
-                        "SELECT s from Student s  where s.id = :id", Student.class
-                ).setParameter("id", 2)
-                .getSingleResult();
-        System.out.println(studentById2);
-
-        // Т.к. сессия следит за объектом, то при коммите будет обращение к бд для обновления
-        session.beginTransaction();
-        Student studentForUpdate = session.get(Student.class, 1);
-        studentForUpdate.setAge(30);
-        studentForUpdate.setName("dima");
-
-        session.getTransaction().commit();
-
-        session.beginTransaction();
-//        Student studentForDelete = session.get(Student.class, 2);
-//        session.remove(studentForDelete);
-
-//        session.createQuery(
-//                "DELETE FROM Student s where s.id = 2")
-//                        .executeUpdate();
-
-//        session.createNativeQuery("""
-//                            delete from students s
-//                            where s.id = 2;
-//                """).executeUpdate();
-        session.getTransaction().commit();
-
-        List<Student> allStudents = session.createQuery("SELECT s FROM Student s", Student.class)
-                        .list();
-
-        Student studentByName = session.createQuery(
-                        "SELECT s from Student s  where s.name = :name", Student.class
-                ).setParameter("name", "pashsa")
-                .getSingleResult();
-        System.out.println("stud by nmae"+studentByName);
-        session.close();
     }
 }
