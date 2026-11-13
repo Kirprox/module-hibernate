@@ -1,11 +1,11 @@
 package com.kir;
 
+import com.kir.service.ProfileService;
 import com.kir.service.StudentService;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
@@ -16,6 +16,7 @@ public class Main {
 
         SessionFactory sessionFactory = context.getBean(SessionFactory.class);
         StudentService studentService = context.getBean(StudentService.class);
+        ProfileService profileService = context.getBean(ProfileService.class);
 
 
         Student student1 = new Student("vasya", 22);
@@ -23,6 +24,10 @@ public class Main {
 
         studentService.saveStudent(student1);
         studentService.saveStudent(student2);
+
+        Profile profile1 = new Profile("By Bio", LocalDateTime.now(), student1);
+
+        profileService.saveProfile(profile1);
 
     }
 }

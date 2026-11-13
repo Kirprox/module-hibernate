@@ -12,6 +12,7 @@ public class HibernateCongiguration {
 
         configuration
                 .addAnnotatedClass(Student.class)
+                .addAnnotatedClass(Profile.class)
                 .addPackage("com.kir")
                 .setProperty("hibernate.connection.driver_class", "org.postgresql.Driver")
                 .setProperty("hibernate.connection.url", "jdbc:postgresql://localhost:5433/postgres")
